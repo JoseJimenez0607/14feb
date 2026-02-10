@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¿Quieres ser mi San Valentín?</title>
+    <title>De Mi para tu ❤️</title>
     <style>
+        :root {
+            --color-fondo: #fff0f3;
+            --color-principal: #ff4d6d;
+            --color-secundario: #ff758f;
+            --color-si: #4CAF50;
+            --fuente: 'Quicksand', sans-serif;
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -12,80 +20,101 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #ffeef2;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-fondo);
+            font-family: var(--fuente);
             overflow: hidden;
         }
 
+        /* Corazones animados de fondo */
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 77, 109, 0.2);
+            font-size: 20px;
+            animation: float 6s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
         .container {
+            position: relative;
             text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 90%;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 50px 30px;
+            border-radius: 40px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.15);
+            max-width: 400px;
+            width: 85%;
             z-index: 10;
+            border: 3px solid #ffccd5;
         }
 
         .gif-container img {
-            width: 180px;
-            height: auto;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            width: 100%;
+            max-width: 220px;
+            border-radius: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
         h1 {
-            color: #ff4d6d;
-            font-size: 2rem;
-            margin-bottom: 30px;
+            color: var(--color-principal);
+            font-size: 2.2rem;
+            margin-bottom: 35px;
+            line-height: 1.2;
+            font-weight: 700;
         }
 
         .buttons {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 20px;
         }
 
         .btn {
-            padding: 12px 25px;
-            font-size: 1.1rem;
+            padding: 15px 30px;
+            font-size: 1.2rem;
             border: none;
-            border-radius: 15px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         #si {
-            background-color: #4CAF50;
+            background-color: var(--color-si);
             color: white;
-            z-index: 100; /* Asegura que crezca sobre otros elementos */
+            z-index: 999;
         }
 
         #no {
-            background-color: #ff4d6d;
+            background-color: var(--color-principal);
             color: white;
         }
 
-        .celebracion h1 {
+        /* Pantalla de éxito */
+        .success-msg h1 {
             font-size: 2.5rem;
-            animation: pulse 1s infinite;
+            color: var(--color-principal);
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .success-msg p {
+            color: #777;
+            font-size: 1.1rem;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div class="container" id="main-container">
-        <div class="gif-container" id="gif-wrap">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIybTV4bmhtZ3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif" alt="San V[...]"
+        <div class="gif-container">
+            <img id="main-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIybTV4bmhtZ3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif" alt="Amor">
         </div>
         
         <h1 id="pregunta">¿Quieres ser mi San Valentín? ❤️</h1>
@@ -98,48 +127,59 @@
 
     <script>
         let escalaSi = 1;
-        let scaleNo = 1;
         const frasesNo = [
-            "¿Segura?",
-            "Piénsalo bien...",
-            "¡Anda, di que sí!",
-            "Te daré un chocolate 🍫",
-            "¿Ni por Don Benito? 🐈",
-            "¡Ya pues! :(",
-            "Me voy a poner triste...",
-            "¡Presiona el verde mejor!"
+            "¿Segura?", "Piénsalo bien...", "¡Anda, di que sí!", 
+            "Te daré un chocolate 🍫", "¿Ni por Don Benito? 🐈", 
+            "¡Ya pues! :(", "Me voy a poner triste...", "¡Mira el botón verde!"
         ];
         let indiceFrase = 0;
 
+        // Crear corazones de fondo
+        function createHearts() {
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 3 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+        setInterval(createHearts, 300);
+
         function crecerSi() {
-            // Aumentar escala del botón SI
-            escalaSi += 0.4;
+            escalaSi += 0.5;
             const btnSi = document.getElementById('si');
-            btnSi.style.transform = `scale(${escalaSi}`;
+            btnSi.style.transform = `scale(${escalaSi})`;
             
-            // Cambiar texto del botón NO
             const btnNo = document.getElementById('no');
             btnNo.innerText = frasesNo[indiceFrase % frasesNo.length];
             indiceFrase++;
 
-            // Mover un poco el botón NO para que sea más difícil (opcional)
-            if(escalaSi > 5) {
-                btnNo.style.display = 'none'; // Desaparece cuando el SI es gigante
+            if(escalaSi > 6) {
+                btnNo.style.display = 'none';
             }
         }
 
-        function celebrar() {
+        async function celebrar() {
+            // 1. Notificar por correo (Reemplaza el link abajo)
+            const FORMSPREE_URL = "TU_ID_DE_FORMSPREE"; 
+            if(FORMSPREE_URL !== "TU_ID_DE_FORMSPREE") {
+                fetch(FORMSPREE_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ mensaje: "¡DIJO QUE SÍ! 😍" }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
+
+            // 2. Cambiar diseño
             const container = document.getElementById('main-container');
-            container.classList.add('celebracion');
             container.innerHTML = `
-                <div class="gif-container">
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnYybTV4bmhtZ3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Lo[...]"
+                <div class="success-msg">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnYybTV4bmhtZ3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l0MYt5jPR6QX5pnqM/giphy.gif">
+                    <h1>Ya sabi que dirias que si 💕💕</h1>
+                    <p>¡Eres la mejor persona del mundo! Te quiero mucho.</p>
                 </div>
-                <h1>Ya sabi que dirias que si 💕💕</h1>
-                <p style="color: #666;">Te quiero mucho.</p>
             `;
-            
-            // Efecto de fondo
             document.body.style.backgroundColor = "#ffc1cf";
         }
     </script>
