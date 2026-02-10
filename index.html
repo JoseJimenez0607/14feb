@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>De Mi para tu ❤️</title>
+    <title>❤️ Para tu ❤️</title>
     <style>
         :root {
             --color-fondo: #fff0f3;
@@ -23,48 +23,51 @@
             background-color: var(--color-fondo);
             font-family: var(--fuente);
             overflow: hidden;
+            touch-action: manipulation; /* Evita zoom molesto en iPhone */
         }
 
         /* Corazones animados de fondo */
         .bg-heart {
             position: absolute;
-            color: rgba(255, 77, 109, 0.2);
+            color: rgba(255, 77, 109, 0.25);
             font-size: 20px;
-            animation: float 6s linear infinite;
+            animation: float 5s linear infinite;
             z-index: 1;
+            user-select: none;
         }
 
         @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
         }
 
         .container {
             position: relative;
             text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 50px 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 25px;
             border-radius: 40px;
-            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.15);
-            max-width: 400px;
+            box-shadow: 0 15px 40px rgba(255, 77, 109, 0.2);
+            max-width: 350px;
             width: 85%;
             z-index: 10;
-            border: 3px solid #ffccd5;
+            border: 4px solid #ffccd5;
+            transition: all 0.5s ease;
         }
 
         .gif-container img {
             width: 100%;
-            max-width: 220px;
+            max-width: 200px;
             border-radius: 25px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
         h1 {
             color: var(--color-principal);
-            font-size: 2.2rem;
-            margin-bottom: 35px;
-            line-height: 1.2;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            line-height: 1.3;
             font-weight: 700;
         }
 
@@ -72,18 +75,20 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
+            flex-wrap: nowrap; /* Mantiene botones en línea hasta que crezca */
         }
 
         .btn {
-            padding: 15px 30px;
-            font-size: 1.2rem;
+            padding: 15px 25px;
+            font-size: 1.1rem;
             border: none;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-weight: bold;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            -webkit-tap-highlight-color: transparent;
         }
 
         #si {
@@ -95,17 +100,26 @@
         #no {
             background-color: var(--color-principal);
             color: white;
+            white-space: nowrap;
         }
 
         /* Pantalla de éxito */
         .success-msg h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             color: var(--color-principal);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         .success-msg p {
-            color: #777;
-            font-size: 1.1rem;
+            color: #ff758f;
+            font-size: 1.2rem;
+            font-weight: 500;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
@@ -130,19 +144,20 @@
         const frasesNo = [
             "¿Segura?", "Piénsalo bien...", "¡Anda, di que sí!", 
             "Te daré un chocolate 🍫", "¿Ni por Don Benito? 🐈", 
-            "¡Ya pues! :(", "Me voy a poner triste...", "¡Mira el botón verde!"
+            "¡Ya pues! :(", "Me voy a poner triste...", "¡Mira el botón verde! ✨"
         ];
         let indiceFrase = 0;
 
-        // Crear corazones de fondo
+        // Generador de corazones mejorado
         function createHearts() {
             const heart = document.createElement('div');
             heart.classList.add('bg-heart');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 3 + 's';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
             document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 6000);
+            setTimeout(() => heart.remove(), 5000);
         }
         setInterval(createHearts, 300);
 
@@ -155,32 +170,49 @@
             btnNo.innerText = frasesNo[indiceFrase % frasesNo.length];
             indiceFrase++;
 
-            if(escalaSi > 6) {
-                btnNo.style.display = 'none';
+            // Ocultar "No" si el "Si" ya es muy grande
+            if(escalaSi > 5.5) {
+                btnNo.style.opacity = '0';
+                btnNo.style.pointerEvents = 'none';
             }
         }
 
         async function celebrar() {
-            // 1. Notificar por correo (Reemplaza el link abajo)
+            // 1. Notificación a Formspree (Jose, esto ya funciona directo)
             const FORMSPREE_URL = "https://formspree.io/f/mbdadgzj"; 
-            if(FORMSPREE_URL !== "https://formspree.io/f/mbdadgzj") {
-                fetch(FORMSPREE_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ mensaje: "¡DIJO QUE SÍ! 😍" }),
-                    headers: { 'Content-Type': 'application/json' }
-                });
-            }
+            
+            fetch(FORMSPREE_URL, {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    respuesta: "¡DIJO QUE SÍ! 😍", 
+                    fecha: new Date().toLocaleString() 
+                }),
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json' 
+                }
+            }).catch(err => console.log("Error de red, pero igual celebramos"));
 
-            // 2. Cambiar diseño
+            // 2. Cambio de pantalla épico
             const container = document.getElementById('main-container');
-            container.innerHTML = `
-                <div class="success-msg">
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnYybTV4bmhtZ3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l0MYt5jPR6QX5pnqM/giphy.gif">
-                    <h1>Ya sabia que dirias que si 💕💕</h1>
-                    <p>¡Eres la mejor del mundo! Te quiero mucho.</p>
-                </div>
-            `;
-            document.body.style.backgroundColor = "#ffc1cf";
+            container.style.transform = "scale(0)";
+            
+            setTimeout(() => {
+                container.innerHTML = `
+                    <div class="success-msg">
+                        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnYybTV4bmhtZ3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l0MYt5jPR6QX5pnqM/giphy.gif">
+                        <h1>Ya sabia que dirias que si 💕💕</h1>
+                        <p>¡Eres la mejor del mundo!</p>
+                    </div>
+                `;
+                container.style.transform = "scale(1)";
+                document.body.style.backgroundColor = "#ffc1cf";
+                
+                // Lluvia intensa de corazones al final
+                for(let i=0; i<50; i++) {
+                    setTimeout(createHearts, i * 50);
+                }
+            }, 500);
         }
     </script>
 </body>
