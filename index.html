@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>❤️ Para tu ❤️</title>
+    <title>❤️Para tu❤️</title>
     <style>
         :root {
             --color-fondo: #fff0f3;
@@ -24,9 +24,9 @@
             touch-action: manipulation;
         }
 
+        /* Corazones animados multícolor */
         .bg-heart {
             position: absolute;
-            color: rgba(255, 77, 109, 0.25);
             font-size: 20px;
             animation: float 5s linear infinite;
             z-index: 1;
@@ -87,8 +87,7 @@
         #si { background-color: var(--color-si); color: white; z-index: 999; }
         #no { background-color: var(--color-principal); color: white; }
 
-        .success-msg h1 { font-size: 2rem; animation: pulse 1s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .success-msg h1 { font-size: 1.8rem; color: #ff4d6d; margin-top: 15px; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 </head>
@@ -107,8 +106,9 @@
 
     <script>
         let escalaSi = 1;
-        const frasesNo = ["¿Segura?", "Piénsalo bien...", "¡Anda, di que sí!", "Te daré un chocolate 🍫", "¿Ni por Don Benito? 🐈", "¡Ya pues! :(", "¡Mira el botón verde! ✨"];
+        const frasesNo = ["¿Segura?", "Piénsalo bien...", "Te daré un chocolate 🍫", "¿Ni por Don Benito? 🐈", "¡Mira el botón verde! ✨"];
         let indiceFrase = 0;
+        const coloresCorazones = ['#ff4d6d', '#ff758f', '#ffccd5', '#ffffff', '#c9184a', '#ffb3c1'];
 
         function createHearts() {
             const heart = document.createElement('div');
@@ -116,11 +116,12 @@
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.color = coloresCorazones[Math.floor(Math.random() * coloresCorazones.length)];
             heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 5000);
         }
-        setInterval(createHearts, 300);
+        setInterval(createHearts, 250);
 
         function crecerSi() {
             escalaSi += 0.5;
@@ -131,7 +132,7 @@
         }
 
         function celebrar() {
-            // Notificación Formspree
+            // Notificación Formspree con tu ID: mbdadgzj
             fetch("https://formspree.io/f/mbdadgzj", {
                 method: 'POST',
                 body: JSON.stringify({ respuesta: "¡DIJO QUE SÍ! 😍", fecha: new Date().toLocaleString() }),
@@ -139,18 +140,21 @@
             });
 
             const container = document.getElementById('main-container');
-            container.style.transform = "scale(0)";
+            container.style.opacity = "0";
             
             setTimeout(() => {
                 container.innerHTML = `
                     <div class="success-msg">
-                        <img src="https://media.gifdb.com/denji-and-reze-up4zoqnrbsgkr3d9.gif" alt="Denji y Reze">
+                        <img src="https://media.gifdb.com/denji-and-reze-up4zoqnrbsgkr3d9.gif" style="width:100%; border-radius:20px;">
                         <h1>ahora me avisa wajajwjajaj 💕💕</h1>
                         <p style="color: #ff758f; font-weight: bold;">¡Eres la mejor del mundo!</p>
                     </div>
                 `;
-                container.style.transform = "scale(1)";
+                container.style.opacity = "1";
                 document.body.style.backgroundColor = "#ffc1cf";
+                
+                // Lluvia masiva de colores al final
+                for(let i=0; i<30; i++) { setTimeout(createHearts, i * 100); }
             }, 500);
         }
     </script>
