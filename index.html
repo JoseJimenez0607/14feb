@@ -24,18 +24,32 @@
             touch-action: manipulation;
         }
 
-        /* Corazones animados multícolor */
-        .bg-heart {
+        /* Elementos animados: Corazones, Flores y Estrellas */
+        .floating-item {
             position: absolute;
-            font-size: 20px;
-            animation: float 5s linear infinite;
-            z-index: 1;
             user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            animation: float 5s linear infinite;
         }
 
         @keyframes float {
             0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
             100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Brillo de estrellas */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .star {
+            position: absolute;
+            color: #fff;
+            text-shadow: 0 0 5px #fff7a1;
+            animation: twinkle 2s infinite ease-in-out;
+            z-index: 0;
         }
 
         .container {
@@ -95,7 +109,7 @@
 
     <div class="container" id="main-container">
         <div class="gif-container">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIybTV4bmhtZ3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif" alt="Cargando amor...">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIybTV4bmhtZ3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif" alt="Amor Inicial">
         </div>
         <h1>¿Quieres ser mi San Valentín? ❤️</h1>
         <div class="buttons">
@@ -108,20 +122,39 @@
         let escalaSi = 1;
         const frasesNo = ["¿Segura?", "Piénsalo bien...", "Te daré un chocolate 🍫", "¿Ni por Don Benito? 🐈", "¡Mira el botón verde! ✨"];
         let indiceFrase = 0;
+        const elementos = ['❤️', '🌸', '🌹', '✨', '💖'];
         const coloresCorazones = ['#ff4d6d', '#ff758f', '#ffccd5', '#ffffff', '#c9184a', '#ffb3c1'];
 
-        function createHearts() {
-            const heart = document.createElement('div');
-            heart.classList.add('bg-heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-            heart.style.color = coloresCorazones[Math.floor(Math.random() * coloresCorazones.length)];
-            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 5000);
+        // Generador de ambiente (Corazones y Flores)
+        function createFloatingItems() {
+            const item = document.createElement('div');
+            item.classList.add('floating-item');
+            item.innerHTML = elementos[Math.floor(Math.random() * elementos.length)];
+            item.style.left = Math.random() * 100 + 'vw';
+            item.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            if (item.innerHTML === '❤️' || item.innerHTML === '💖') {
+                item.style.color = coloresCorazones[Math.floor(Math.random() * coloresCorazones.length)];
+            }
+            item.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            document.body.appendChild(item);
+            setTimeout(() => item.remove(), 6000);
         }
-        setInterval(createHearts, 250);
+        setInterval(createFloatingItems, 300);
+
+        // Generador de Estrellas fijas de fondo
+        function createStars() {
+            for(let i=0; i<20; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.innerHTML = '✦';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.fontSize = (Math.random() * 10 + 5) + 'px';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(star);
+            }
+        }
+        createStars();
 
         function crecerSi() {
             escalaSi += 0.5;
@@ -132,7 +165,6 @@
         }
 
         function celebrar() {
-            // Notificación Formspree con tu ID: mbdadgzj
             fetch("https://formspree.io/f/mbdadgzj", {
                 method: 'POST',
                 body: JSON.stringify({ respuesta: "¡DIJO QUE SÍ! 😍", fecha: new Date().toLocaleString() }),
@@ -145,7 +177,7 @@
             setTimeout(() => {
                 container.innerHTML = `
                     <div class="success-msg">
-                        <img src="https://media.gifdb.com/denji-and-reze-up4zoqnrbsgkr3d9.gif" style="width:100%; border-radius:20px;">
+                        <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdDVnNDh2cm5oNGlqYXBvNXE3MXQza3QxbmIweTFzejRlOHF4c3FoMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/beQlhn9IBXSXmkaYfi/giphy.gif" style="width:100%; border-radius:20px;">
                         <h1>ahora me avisa wajajwjajaj 💕💕</h1>
                         <p style="color: #ff758f; font-weight: bold;">¡Eres la mejor del mundo!</p>
                     </div>
@@ -153,8 +185,8 @@
                 container.style.opacity = "1";
                 document.body.style.backgroundColor = "#ffc1cf";
                 
-                // Lluvia masiva de colores al final
-                for(let i=0; i<30; i++) { setTimeout(createHearts, i * 100); }
+                // Lluvia masiva de celebración
+                for(let i=0; i<50; i++) { setTimeout(createFloatingItems, i * 80); }
             }, 500);
         }
     </script>
