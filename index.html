@@ -8,14 +8,12 @@
         :root {
             --color-fondo: #fff0f3;
             --color-principal: #ff4d6d;
-            --color-secundario: #ff758f;
             --color-si: #4CAF50;
             --fuente: 'Quicksand', sans-serif;
         }
 
         body {
             margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,10 +21,9 @@
             background-color: var(--color-fondo);
             font-family: var(--fuente);
             overflow: hidden;
-            touch-action: manipulation; /* Evita zoom molesto en iPhone */
+            touch-action: manipulation;
         }
 
-        /* Corazones animados de fondo */
         .bg-heart {
             position: absolute;
             color: rgba(255, 77, 109, 0.25);
@@ -57,8 +54,7 @@
 
         .gif-container img {
             width: 100%;
-            max-width: 200px;
-            border-radius: 25px;
+            border-radius: 20px;
             margin-bottom: 20px;
             box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
@@ -67,7 +63,6 @@
             color: var(--color-principal);
             font-size: 1.8rem;
             margin-bottom: 30px;
-            line-height: 1.3;
             font-weight: 700;
         }
 
@@ -76,7 +71,6 @@
             justify-content: center;
             align-items: center;
             gap: 15px;
-            flex-wrap: nowrap; /* Mantiene botones en línea hasta que crezca */
         }
 
         .btn {
@@ -88,39 +82,13 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-weight: bold;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            -webkit-tap-highlight-color: transparent;
         }
 
-        #si {
-            background-color: var(--color-si);
-            color: white;
-            z-index: 999;
-        }
+        #si { background-color: var(--color-si); color: white; z-index: 999; }
+        #no { background-color: var(--color-principal); color: white; }
 
-        #no {
-            background-color: var(--color-principal);
-            color: white;
-            white-space: nowrap;
-        }
-
-        /* Pantalla de éxito */
-        .success-msg h1 {
-            font-size: 2.2rem;
-            color: var(--color-principal);
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .success-msg p {
-            color: #ff758f;
-            font-size: 1.2rem;
-            font-weight: 500;
-        }
+        .success-msg h1 { font-size: 2rem; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 </head>
@@ -128,11 +96,9 @@
 
     <div class="container" id="main-container">
         <div class="gif-container">
-            <img id="main-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIybTV4bmhtZ3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif" alt="Amor">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIybTV4bmhtZ3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4Z3R4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif" alt="Cargando amor...">
         </div>
-        
-        <h1 id="pregunta">¿Quieres ser mi San Valentín? ❤️</h1>
-        
+        <h1>¿Quieres ser mi San Valentín? ❤️</h1>
         <div class="buttons">
             <button id="si" class="btn" onclick="celebrar()">¡SÍ!</button>
             <button id="no" class="btn" onclick="crecerSi()">No</button>
@@ -141,14 +107,9 @@
 
     <script>
         let escalaSi = 1;
-        const frasesNo = [
-            "¿Segura?", "Piénsalo bien...", "¡Anda, di que sí!", 
-            "Te daré un chocolate 🍫", "¿Ni por Don Benito? 🐈", 
-            "¡Ya pues! :(", "Me voy a poner triste...", "¡Mira el botón verde! ✨"
-        ];
+        const frasesNo = ["¿Segura?", "Piénsalo bien...", "¡Anda, di que sí!", "Te daré un chocolate 🍫", "¿Ni por Don Benito? 🐈", "¡Ya pues! :(", "¡Mira el botón verde! ✨"];
         let indiceFrase = 0;
 
-        // Generador de corazones mejorado
         function createHearts() {
             const heart = document.createElement('div');
             heart.classList.add('bg-heart');
@@ -163,55 +124,33 @@
 
         function crecerSi() {
             escalaSi += 0.5;
-            const btnSi = document.getElementById('si');
-            btnSi.style.transform = `scale(${escalaSi})`;
-            
-            const btnNo = document.getElementById('no');
-            btnNo.innerText = frasesNo[indiceFrase % frasesNo.length];
+            document.getElementById('si').style.transform = `scale(${escalaSi})`;
+            document.getElementById('no').innerText = frasesNo[indiceFrase % frasesNo.length];
             indiceFrase++;
-
-            // Ocultar "No" si el "Si" ya es muy grande
-            if(escalaSi > 5.5) {
-                btnNo.style.opacity = '0';
-                btnNo.style.pointerEvents = 'none';
-            }
+            if(escalaSi > 5.5) document.getElementById('no').style.display = 'none';
         }
 
-        async function celebrar() {
-            // 1. Notificación a Formspree (Jose, esto ya funciona directo)
-            const FORMSPREE_URL = "https://formspree.io/f/mbdadgzj"; 
-            
-            fetch(FORMSPREE_URL, {
+        function celebrar() {
+            // Notificación Formspree
+            fetch("https://formspree.io/f/mbdadgzj", {
                 method: 'POST',
-                body: JSON.stringify({ 
-                    respuesta: "¡DIJO QUE SÍ! 😍", 
-                    fecha: new Date().toLocaleString() 
-                }),
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json' 
-                }
-            }).catch(err => console.log("Error de red, pero igual celebramos"));
+                body: JSON.stringify({ respuesta: "¡DIJO QUE SÍ! 😍", fecha: new Date().toLocaleString() }),
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+            });
 
-            // 2. Cambio de pantalla épico
             const container = document.getElementById('main-container');
             container.style.transform = "scale(0)";
             
             setTimeout(() => {
                 container.innerHTML = `
                     <div class="success-msg">
-                        <img src="https://media.gifdb.com/denji-and-reze-up4zoqnrbsgkr3d9.gif">
-                        <h1>Ya sabia que dirias que si 💕💕</h1>
-                        <p>¡Eres la mejor del mundo!</p>
+                        <img src="https://media.gifdb.com/denji-and-reze-up4zoqnrbsgkr3d9.gif" alt="Denji y Reze">
+                        <h1>ahora me avisa wajajwjajaj 💕💕</h1>
+                        <p style="color: #ff758f; font-weight: bold;">¡Eres la mejor del mundo!</p>
                     </div>
                 `;
                 container.style.transform = "scale(1)";
                 document.body.style.backgroundColor = "#ffc1cf";
-                
-                // Lluvia intensa de corazones al final
-                for(let i=0; i<50; i++) {
-                    setTimeout(createHearts, i * 50);
-                }
             }, 500);
         }
     </script>
